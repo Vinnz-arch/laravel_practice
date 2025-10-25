@@ -18,6 +18,41 @@
             </script>
         @endif
 
+        {{-- sweetalert --}}
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                // Target all buttons whose ID starts with 'delete-button-'
+                const deleteButtons = document.querySelectorAll('[id^="delete-button-"]');
+
+                deleteButtons.forEach(button => {
+                    button.addEventListener('click', function(e) {
+                        // Get the unique ID from the button (e.g., 'delete-button-5')
+                        const recordId = this.id.replace('delete-button-', '');
+                        // Get the corresponding form element (e.g., 'delete-form-5')
+                        const form = document.getElementById('delete-form-' + recordId);
+
+                        Swal.fire({
+                            title: 'Are you sure?',
+                            text: "You won't be able to revert this!",
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonColor: '#d33',
+                            cancelButtonColor: '#3085d6',
+                            confirmButtonText: 'Yes, delete it!'
+                        }).then((result) => {
+                            // Check if the user clicked the 'Confirm' button
+                            if (result.isConfirmed) {
+                                // Submit the form programmatically
+                                form.submit();
+                            }
+                        })
+                    });
+                });
+            });
+        </script>
+        {{--  --}}
+
 
         <!-- Stats Cards -->
         <div class="grid auto-rows-min gap-4 md:grid-cols-3">
@@ -132,12 +167,12 @@
                                         <td class="px-4 py-3 text-sm text-neutral-600 dark:text-neutral-400">{{ $men->phone }}</td>
                                         <td class="px-4 py-3 text-sm text-neutral-600 dark:text-neutral-400">{{ $men->address }}</td>
                                         <td class="px-4 py-3 text-sm">
-                                            <button  onclick="openEditModal('{{ $men->id }}', '{{ $men->name }}', '{{ $men->email }}', '{{ $men->phone }}', '{{ $men->address }}')" class="text-blue-600 transition-colors hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300">Edit</button>
+                                            <button  onclick="openEditModal('{{ $men->id }}', '{{ $men->name }}', '{{ $men->email }}', '{{ $men->phone }}', '{{ $men->address }}')" class="text-blue-600 transition-colors hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 cursor-pointer">Edit</button>
                                             <span class="mx-1 text-neutral-400">|</span>
-                                            <form action="{{ route('mens.destroy', $men->id) }}" method="POST" onsubmit="return comfirm('Are you sure you want to delete this record?')" class="inline">
+                                            <form action="{{ route('mens.destroy', $men->id) }}" id="delete-form-{{ $men->id }}" method="POST" class="inline">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="text-red-600 inline transition-colors hover:text-red-700 dark:text-red-400 dark:hover:text-red-300">Delete</button>
+                                                <button id="delete-button-{{ $men->id }}" type="button" class="text-red-600 inline transition-colors hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 cursor-pointer">Delete</button>
                                             </form>
                                         </td>
                                     </tr>
