@@ -13,6 +13,7 @@ class MenController extends Controller
         return view('dashboard', compact('mens'));
     }
 
+
     public function store(Request $request)
     {
         // dd('store called', $request->all());
@@ -48,7 +49,29 @@ class MenController extends Controller
     // Delete function
     public function destroy(Men $men) {
         $men->delete();
-
-        return redirect()->back()->with('success', 'Deleted successfully!');
+        return redirect()->back()->with('success', 'Moved to trash successfully!');
     }
+
+    // Recycle Bin function
+     public function recycleBin()
+    {
+        $mens = Men::onlyTrashed()->get(); // fetch only deleted items
+        return view('trash', compact('mens'));
+    }
+
+    public function restore($id)
+    {
+        Men::withTrashed()->findOrFail($id)->restore();
+        return redirect()->back()->with('success', 'Restored successfully!');
+    }
+
+    public function forceDelete($id)
+    {
+        Men::withTrashed()->findOrFail($id)->forceDelete();
+        return redirect()->back()->with('success', 'Deleted permanently!');
+    }
+
+
+
+
 }

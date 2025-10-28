@@ -16,11 +16,18 @@ Route::get('/', function () {
 Route::get('/dashboard', [MenController::class, 'index'])->name('dashboard');
 Route::post('/mens', [MenController::class, 'store'])->name('mens.store');
 
-
+// Delete and Update routes
 Route::delete('/mens/{men}', [MenController::class, 'destroy'])->name('mens.destroy');
 Route::put('/mens/{men}', [MenController::class, 'update'])->name('mens.update');
 Route::get('/mens/{men}/edit', [MenController::class, 'edit'])->name('mens.edit');
 
+// trash function routes
+Route::get('/trash', [MenController::class, 'recycleBin'])->name('trash');
+Route::post('/restore/{id}', [MenController::class, 'restore'])->name('mens.restore');
+Route::delete('/force-delete/{id}', [MenController::class, 'forceDelete'])->name('mens.forceDelete');
+
+
+Route::get('/trash', [MenController::class, 'recycleBin'])->name('trash');
 
 Route::middleware(['auth'])->group(function () {
     Route::redirect('settings', 'settings/profile');
