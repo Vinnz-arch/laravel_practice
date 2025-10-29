@@ -1,10 +1,9 @@
 <x-layouts.app :title="__('Trash')">
     <div class="p-8">
 
-        <h1 class="text-2xl font-bold text-gray-700 mb-6">🗑️ Recycle Bin</h1>
         {{-- success message --}}
         @if (session('success'))
-            <div id="success-message" class="rounded-lg bg-green-100 p-4 text-sm text-green-800 dark:bg-green-900/30 dark:text-green-400">
+            <div id="success-message" class="rounded-lg bg-green-100 p-4 text-sm text-green-800 dark:bg-green-900/30 dark:text-green-400 mb-5">
                 {{ session('success') }}
             </div>
 
@@ -19,7 +18,7 @@
             </script>
         @endif
 
-        <div class="relative h-full flex-1 overflow-hidden border dark:border-neutral-700 dark:bg-neutral-800 mt-6">
+        <div class="flex-1 overflow-auto">
             <table class="w-full min-w-full">
                 <thead class="">
                     <tr class="border-b border-neutral-200 bg-neutral-50 dark:border-neutral-700 dark:bg-neutral-900/50">
@@ -33,8 +32,8 @@
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-neutral-200 dark:divide-neutral-700">
-                    @foreach($mens as $men)
-                        <tr class="btransition-colors hover:bg-neutral-50 dark:hover:bg-neutral-800/50">
+                    @forelse($mens as $men)
+                        <tr class="transition-colors hover:bg-neutral-50 dark:hover:bg-neutral-800/50">
                             <td class="px-4 py-3 text-sm text-neutral-600 dark:text-neutral-400">{{ $loop->iteration }}</td>
                             <td class="px-4 py-3 text-sm text-neutral-600 dark:text-neutral-400">{{ $men->name }}</td>
                             <td class="px-4 py-3 text-sm text-neutral-600 dark:text-neutral-400">{{ $men->email }}</td>
@@ -54,7 +53,12 @@
                                 </form>
                             </td>
                         </tr>
-                    @endforeach
+                    @empty
+                        <tr>
+                            <td colspan="7" class="px-4 py-3 text-center text-sm text-neutral-600 dark:text-neutral-400">No deleted records found.</td>
+                        </tr>
+                    @endforelse
+
                 </tbody>
             </table>
         </div>
